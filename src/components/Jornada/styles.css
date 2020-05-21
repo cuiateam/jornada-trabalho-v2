@@ -1,0 +1,21 @@
+.jornada {
+    padding-top: 20px;
+}
+
+.card { 
+    margin: auto;
+    width: fit-content;
+    border: 1px solid darkgray;
+}
+
+.input {
+    margin-top: 10px;
+}
+
+.button-group {
+    padding-top: 20px;
+}
+
+.button-group :not(:first-child ){
+    margin-left: 5px;
+}
