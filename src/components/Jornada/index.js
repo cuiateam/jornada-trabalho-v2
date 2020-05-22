@@ -8,68 +8,22 @@ import './styles.css'
 
 export default function Jornada() {
 
-    const valorPadraoFormulario = [
-
-        {
-            id:1, 
-            linha:
-                <Form.Row>
-                    <Col>
-                        <Form.Control className="input" type="time" id="entrada1" />
-                    </Col>
-                    <Col>
-                        <Form.Control className="input" type="time" id="saida1" />
-                    </Col>
-                </Form.Row>
-        },
-        {
-            id:2, 
-            linha:
-                <Form.Row>
-                    <Col>
-                        <Form.Control className="input" type="time" id="entrada2" />
-                    </Col>
-                    <Col>
-                        <Form.Control className="input" type="time" id="saida2" readOnly />
-                    </Col>
-                </Form.Row>
-        },
-
-    ]
-
-
-
-    const [adicionaEntradaSaida, setEntradaSaida] = useState(valorPadraoFormulario)
-
-   
-    
+    const [jornada, setJornada] = useState("08:45")
+    const [entrada1, setEntrada1] = useState()
+    const [saida1, setSaida1] = useState()
+    const [entrada2, setEntrada2] = useState()
+    const [saida2, setSaida2] = useState()
 
     function handleClickCalcular(){
   
     }
 
-    function handleClickAdicionar() {
-
-        setEntradaSaida([
-            {
-                id:Math.random(), 
-                linha:
-                    <Form.Row>
-                        <Col>
-                            <Form.Control className="input" type="time" />
-                        </Col>
-                        <Col>
-                            <Form.Control className="input" type="time" />
-                        </Col>
-                    </Form.Row>
-            },
-            ...adicionaEntradaSaida,
-        ])
-
+    function handleClickLimpar() {
+        setEntrada1("")
+        setSaida1("")
+        setEntrada2("")
+        setSaida2("")
     }
-
-   
-
 
     return (
         <div className="jornada">
@@ -80,7 +34,7 @@ export default function Jornada() {
                             <strong>JORNADA:</strong>
                         </Col>
                         <Col>
-                            <Form.Control type="time" id="j"/>
+                            <Form.Control type="time" id="j" value={jornada} onChange={(e) => setJornada(e.target.value)} />
                         </Col>
                     </Form.Row>
 
@@ -98,28 +52,33 @@ export default function Jornada() {
                             
                         </Form.Row>
                             
-                        {adicionaEntradaSaida.map(input => (
-                            <div key={input.id}>{input.linha}</div>
-                        ))}
+                        <Form.Row>
+                            <Col>
+                                <Form.Control className="input" type="time" id="entrada1" value={entrada1} onChange={(e) => setEntrada1(e.target.value)}/>
+                            </Col>
+                            <Col>
+                                <Form.Control className="input" type="time" id="saida1" value={saida1} onChange={(e) => setSaida1(e.target.value)}/>
+                            </Col>
+                        </Form.Row>
+                        <Form.Row>
+                            <Col>
+                                <Form.Control className="input" type="time" id="entradaFinal" value={entrada2} onChange={(e)=> setEntrada2(e.target.value)} />
+                            </Col>
+                            <Col>
+                                <Form.Control className="input" type="time" id="saidaFinal" readOnly value={saida2} onChange={(e)=> setSaida2(e.target.value)} />
+                            </Col>
+                        </Form.Row>
                            
                     </Form>
-
-
-
 
                     <div className="button-group">
                         <Button className="button" variant="primary" onClick={() => handleClickCalcular()}>
                             Calcular
                         </Button>
-                        <Button className="button" variant="secondary" onClick={() => handleClickAdicionar()}>
-                            Adicionar
-                        </Button>
-                        <Button className="button" variant="danger" onClick={() => setEntradaSaida(valorPadraoFormulario)}>
+                        <Button className="button" variant="danger" onClick={() => handleClickLimpar()}>
                             Limpar
                         </Button>
                     </div>
-                    
-
                 </Card.Body>
 
             </div>
