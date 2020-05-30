@@ -17,7 +17,6 @@ export default function Jornada() {
     const [camposEntradaSaida, setCamposEntradaSaida] = useState([])
 
     const recordFromTotalMinutes = (total) => {
-
         let h = Math.floor(total / 60)
         let m = total - h * 60
         let desc = String(h).concat(":").concat(("00" + String(m)).slice(-2))
@@ -26,16 +25,13 @@ export default function Jornada() {
     }
 
     function record(h, m, t, d) {
-
         this.hours = h
         this.minutes = m
         this.total = t
         this.desc = d
-
     }
 
     function newRecord(valor) {
-
         var h = parseInt(valor.split(":")[0])
         var m = parseInt(valor.split(":")[1])
         var t = h * 60 + m
@@ -44,7 +40,17 @@ export default function Jornada() {
     }
 
     function validarPreenchimento(){
-        return false
+        let isValid = true
+
+        if (!entrada1 || !saida1 || !entrada2) 
+            return false
+
+        camposEntradaSaida.forEach((item) => {
+            if (!item.horasEntrada || !item.horasSaida) 
+                isValid = false
+        })
+
+        return isValid
     }
 
     function handleClickCalcular() {
@@ -75,14 +81,14 @@ export default function Jornada() {
                 minutosTrabalhado += item.total - listaEntrada[index].total
             })
 
-            //formula
+            // Fórmula
             minutosATrabalhar = parametroJornadaTrabalho.total - minutosTrabalhado
             totalCalculo = entradaFinal.total + minutosATrabalhar
             horaSaida = recordFromTotalMinutes(totalCalculo)
 
             setSaida2(horaSaida.desc)
         } else {
-            alert('Preenche sapoha caralho!!!')
+            alert('ATENÇÃO: Preencher todos os campos!')
         }
 
     }
@@ -104,9 +110,7 @@ export default function Jornada() {
     }
 
     function handleClickAdicionar() {
-        if (entrada2) {
-            setEntrada2("")
-        }
+        setSaida2("")
 
         setCamposEntradaSaida(campos => [...campos, { horasEntrada: "", horasSaida: "" }])
     }
