@@ -6,19 +6,15 @@ import Button from 'react-bootstrap/Button'
 
 import './styles.css'
 
-const campoPadrao = [
-    {
-        horasEntrada: "",
-        horasSaida: ""
-    }
-]
 
 export default function Jornada() {
 
     const [jornada, setJornada] = useState("08:45")
-    const [entrada2, setEntrada2] = useState()
-    const [saida2, setSaida2] = useState()
-    const [camposEntradaSaida, setCamposEntradaSaida] = useState(campoPadrao)
+    const [entrada1, setEntrada1] = useState("")
+    const [saida1, setSaida1] = useState("")
+    const [entrada2, setEntrada2] = useState("")
+    const [saida2, setSaida2] = useState("")
+    const [camposEntradaSaida, setCamposEntradaSaida] = useState([])
 
     const recordFromTotalMinutes = (total) => {
 
@@ -47,61 +43,64 @@ export default function Jornada() {
         return new record(h, m, t, valor)
     }
 
+    function validarPreenchimento(){
+        return false
+    }
+
     function handleClickCalcular() {
-        let minutosTrabalhado = 0
-        let minutosATrabalhar = 0
-        let totalCalculo = 0
-        let horaSaida = 0
-        let entrada
-        let saida
-        let totalMinutosEntrada
-        let valorJornada = newRecord(jornada)
-        let entradaFinal = newRecord(entrada2)
-   
-        // Define o parâmetro de Jornada de Trabalho
-        let parametroJornadaTrabalho = jornada == null ? recordFromTotalMinutes(525) : valorJornada
 
-        //TODO: lista criada para receber valor de todos os campos que forem criado em momento de execução.
-
-
-        entrada = camposEntradaSaida.map((item) => (newRecord(item.horasEntrada)))
+        if (validarPreenchimento()) {
+            let minutosTrabalhado = 0
+            let minutosATrabalhar = 0
+            let totalCalculo = 0
+            let horaSaida = 0
         
+            let valorJornada = newRecord(jornada)
+            let entradaInicial = newRecord(entrada1)
+            let saidaInicial = newRecord(saida1)
+            let entradaFinal = newRecord(entrada2)
 
-        saida = camposEntradaSaida.map((item) => (newRecord(item.horasSaida)))
-        
-        console.log(entrada)
-        console.log(entrada.length)
+            // Define o parâmetro de Jornada de Trabalho
+            let parametroJornadaTrabalho = jornada == null ? recordFromTotalMinutes(525) : valorJornada
 
-        for(let i=0; i <= entrada.length; i++){
-             totalMinutosEntrada += entrada[i].record.total 
+            // Carrega as entradas e saidas dinâmicas
+            let listaEntrada = camposEntradaSaida.map((item) => (newRecord(item.horasEntrada)))
+            let listaSaida = camposEntradaSaida.map((item) => (newRecord(item.horasSaida)))
+
+            // Carrega minutos trabalhados na primeira linha
+            minutosTrabalhado = saidaInicial.total - entradaInicial.total
+
+            // Carrega minutos trabalhados na linhas dinâmicas
+            listaSaida.forEach((item, index) => {
+                minutosTrabalhado += item.total - listaEntrada[index].total
+            })
+
+            //formula
+            minutosATrabalhar = parametroJornadaTrabalho.total - minutosTrabalhado
+            totalCalculo = entradaFinal.total + minutosATrabalhar
+            horaSaida = recordFromTotalMinutes(totalCalculo)
+
+            setSaida2(horaSaida.desc)
+        } else {
+            alert('Preenche sapoha caralho!!!')
         }
-       
-        console.log(totalMinutosEntrada)
-
-
-        minutosTrabalhado = saida.total - entrada.total
-
-        //formula
-        minutosATrabalhar = parametroJornadaTrabalho.total - minutosTrabalhado
-        totalCalculo = entradaFinal.total + minutosATrabalhar
-        horaSaida = recordFromTotalMinutes(totalCalculo)
-
-        setSaida2(horaSaida.desc)
 
     }
 
     function handleClickLimpar() {
+        setEntrada1("")
+        setSaida1("")
         setEntrada2("")
         setSaida2("")
-        setCamposEntradaSaida(campoPadrao)
+        setCamposEntradaSaida([])
     }
 
     const handleFieldChange = (e) => {
-        let tempFilds = [...camposEntradaSaida]
+        let tempFields = [...camposEntradaSaida]
 
-        tempFilds[e.target.dataset.id][e.target.name] = e.target.value
+        tempFields[e.target.dataset.id][e.target.name] = e.target.value
 
-        setCamposEntradaSaida(tempFilds)
+        setCamposEntradaSaida(tempFields)
     }
 
     function handleClickAdicionar() {
@@ -139,7 +138,26 @@ export default function Jornada() {
 
                         </Form.Row>
 
-                        {camposEntradaSaida.map((item, index) => (
+                        <Form.Row>
+                                <Col>
+                                    <Form.Control
+                                        name="horasEntrada"
+                                        className="input"
+                                        type="time"
+                                        value={entrada1}
+                                        onChange={(e) => setEntrada1(e.target.value)} />
+                                </Col>
+                                <Col>   
+                                    <Form.Control
+                                        name="horasSaida"
+                                        className="input"
+                                        type="time"
+                                        value={saida1}
+                                        onChange={(e) => setSaida1(e.target.value)} />
+                                </Col>
+                            </Form.Row>
+
+                        {camposEntradaSaida.length > 0 && camposEntradaSaida.map((item, index) => (
 
                             <Form.Row key={index}>
                                 <Col>
@@ -151,7 +169,7 @@ export default function Jornada() {
                                         value={item.horasEntrada}
                                         onChange={handleFieldChange} />
                                 </Col>
-                                <Col>
+                                <Col>   
                                     <Form.Control
                                         name="horasSaida"
                                         className="input"
@@ -174,13 +192,12 @@ export default function Jornada() {
                             </Col>
                             <Col>
                                 <Form.Control
-                                  
                                     className="input"
                                     type="time"
                                     id="saidaFinal"
                                     readOnly
                                     value={saida2}
-                                    onChange={(e) => setSaida2(e.target.value)} />
+                                />
                             </Col>
                         </Form.Row>
                     </Form>
