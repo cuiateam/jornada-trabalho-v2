@@ -94,6 +94,11 @@ export default function Jornada() {
     }
 
     function handleClickLimpar() {
+        //Limpar campos preenchidos pela metade.
+        document.getElementById("inputEntrada").value = ""
+        document.getElementById("inputaSaida").value = ""
+        document.getElementById("entradaFinal").value = ""
+
         setEntrada1("")
         setSaida1("")
         setEntrada2("")
@@ -145,6 +150,7 @@ export default function Jornada() {
                         <Form.Row>
                                 <Col>
                                     <Form.Control
+                                        id="inputEntrada"
                                         name="horasEntrada"
                                         className="input"
                                         type="time"
@@ -153,6 +159,7 @@ export default function Jornada() {
                                 </Col>
                                 <Col>   
                                     <Form.Control
+                                        id="inputaSaida"
                                         name="horasSaida"
                                         className="input"
                                         type="time"
