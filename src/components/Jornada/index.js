@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
+import LinhaDinamica from '../LinhaDinamica'
+
 import './styles.css'
 
 
@@ -169,27 +171,7 @@ export default function Jornada() {
                             </Form.Row>
 
                         {camposEntradaSaida.length > 0 && camposEntradaSaida.map((item, index) => (
-
-                            <Form.Row key={index}>
-                                <Col>
-                                    <Form.Control
-                                        name="horasEntrada"
-                                        className="input"
-                                        type="time"
-                                        data-id={index}
-                                        value={item.horasEntrada}
-                                        onChange={handleFieldChange} />
-                                </Col>
-                                <Col>   
-                                    <Form.Control
-                                        name="horasSaida"
-                                        className="input"
-                                        type="time"
-                                        data-id={index}
-                                        value={item.horasSaida}
-                                        onChange={handleFieldChange} />
-                                </Col>
-                            </Form.Row>
+                            <LinhaDinamica index={index} item={item} handleFieldChange={handleFieldChange}/>
                         ))}
 
                         <Form.Row>
