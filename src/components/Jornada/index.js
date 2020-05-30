@@ -171,7 +171,7 @@ export default function Jornada() {
                             </Form.Row>
 
                         {camposEntradaSaida.length > 0 && camposEntradaSaida.map((item, index) => (
-                            <LinhaDinamica index={index} item={item} handleFieldChange={handleFieldChange}/>
+                            <LinhaDinamica index={index} item={item} handleFieldChange={handleFieldChange} key={index} />
                         ))}
 
                         <Form.Row>
